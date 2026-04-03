@@ -10,7 +10,7 @@
     <style>
         body {
             font-family: 'Segoe UI', sans-serif;
-            background: linear-gradient(to right, #4facfe, #00f2fe);
+            background: linear-gradient(to right, #74ebd5, #9face6);
             height: 100vh;
             display: flex;
             justify-content: center;
@@ -40,6 +40,9 @@
         input {
             border-top-left-radius: 30px !important;
             border-bottom-left-radius: 30px !important;
+        }
+        .form-control:focus{
+            box-shadow: none;
         }
 
         .btn-search {
@@ -105,19 +108,25 @@
 
             let res = await fetch(url)
             let data = await res.json()
+            // console.log(data)
 
             if (data.cod == '404') {
                 result.innerHTML = "❌ City not found";
                 return;
             }
 
-            let icon = "☀️";
-            if (data.weather[0].main === "Clouds") icon = "☁️";
-            if (data.weather[0].main === "Rain") icon = "🌧";
+            let iconCode = data.weather[0].icon;
+            let img = `https://openweathermap.org/img/wn/${iconCode}@2x.png`;
+
+            let emoji = "☀️";
+
+            if (data.weather[0].main === "Clouds") emoji = "☁️";
+            if (data.weather[0].main === "Rain") emoji = "🌧";
 
             result.innerHTML = `
                 <div>
-                    <div class="weather-icon">${icon}</div>
+                    <div class="weather-icon">${emoji}</div>
+                    <img src="${img}" />
                     <h2>${data.name}</h2>
                     <div class="temp">${data.main.temp}°C</div>
                     <div class="details">Humidity: ${data.main.humidity}%</div>
